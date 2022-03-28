@@ -1,6 +1,10 @@
+using ex_graphql.Contracts;
+using ex_graphql.Entities.Context;
+using ex_graphql.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,16 +19,29 @@ namespace ex_graphql
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
-        public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Verificando a disponibilidade dos bancos de dados da aplicação através de Health Checks
+            string conx = Configuration.GetSection("SqlServerSettings").GetSection("ConnectionString").Value;
+
+            services.AddDbContext<ApplicationContext>(opt =>
+                opt.UseSqlServer(conx.Replace("%CONTENTROOTPATH%", Environment.ContentRootPath)));
+
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
