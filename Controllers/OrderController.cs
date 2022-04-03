@@ -3,6 +3,7 @@ using ex_graphql.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace ex_graphql.Controllers
 
         // GET: api/TodoItems
         [HttpGet]
+        [SwaggerOperation(Summary = "Get all orders", Description = "Get all orders")]
         public async Task<ActionResult> GetAll()
         {
             try
@@ -33,23 +35,6 @@ namespace ex_graphql.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from database");
                 throw;
             }
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomerById(string id)
-        {
-            try
-            {
-                var result = await _repository.GetAllByCustomer(new Guid(id));
-                if (result == null) return NotFound();
-
-                return Ok(result);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from database");
-                throw;
-            }
-        }
+        }        
     }
 }

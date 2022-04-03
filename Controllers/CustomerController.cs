@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace ex_graphql.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get all customers (does not return orders)", Description = "Get all customers (does not return orders)")]
         public async Task<ActionResult> GetAll()
         {
             try
@@ -38,16 +40,17 @@ namespace ex_graphql.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(string id)
+        [SwaggerOperation(Summary = "Get customer by id - is it possible to return the orders or not", Description = "Get customer by id - is it possible to return the orders or not")]
+        public async Task<ActionResult> GetById(string id, bool returnOrders)
         {
             try
             {
-                var result = await _repository.GetById(new Guid(id));
+                var result = await _repository.GetById(new Guid(id), returnOrders);
                 if (result == null) return NotFound();
 
                 return Ok(result);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from database");
                 throw;
