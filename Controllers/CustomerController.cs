@@ -50,7 +50,7 @@ namespace ex_graphql.Controllers
 
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data from database");
                 throw;

@@ -22,6 +22,11 @@ namespace ex_graphql.Repository
             return await _context.Customers.ToListAsync();
         }
 
+        public async Task<IEnumerable<Customer>> GetAllWithOrders()
+        {
+            return await _context.Customers.Include(x => x.Orders).ToListAsync();
+        }
+
         public async Task<Customer> GetById(Guid id, bool returnOrders)
         {
             if (returnOrders)
