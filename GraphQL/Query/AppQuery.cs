@@ -1,5 +1,7 @@
 ﻿using ex_graphql.Contracts;
+using GraphQL;
 using GraphQL.Types;
+using System;
 
 namespace ex_graphql.GraphQL
 {
@@ -7,13 +9,20 @@ namespace ex_graphql.GraphQL
     {
         public AppQuery(ICustomerRepository repository)
         {
-            Name = "Queries";
-            Description = "The base query for all the entities in our object graph.";
+            Name = "Consultas";
+            Description = "A consulta base para todas as entidades em nosso gráfico de objetos.";
 
+            //Para listar todos os clientes com respectivas ordens
             Field<ListGraphType<CustomerType>>(
                 "customers",
+                "Retorna uma lista de clientes com suas respectivas ordens.",
                 resolve: context => repository.GetAllWithOrders()
                 );
+
+            //para consultar um cliente pelo ID
+            Field<CustomerType>("customer", "Retorna um cliente pelo ID",
+                new QueryArguments(new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "id", Description = "Customer Id" }),
+                    context => repository.GetById(Guid.Parse(context.GetArgument<string>("id")), true));
         }
     }
 }

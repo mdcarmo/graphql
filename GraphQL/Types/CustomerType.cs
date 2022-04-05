@@ -8,9 +8,10 @@ namespace ex_graphql.GraphQL
     {
         public CustomerType()
         {
-            Field(x => x.Id, type: typeof(IdGraphType)).Description("Id property from the customer object.");
-            Field(x => x.Name).Description("Name property from the csutomer object.");
-
+            Field(x => x.Id, type: typeof(IdGraphType)).Description("Identificador do cliente.");
+            Field(x => x.Name).Description("Nome do cliente.");
+            Field(x => x.IdentificationNumber).Description("Número de identificaçao do cliente.");
+            Field(x => x.Email).Description("Email do cliente.");
             Field(
                 name: "orders",
                 description: "Lista de ordens",
