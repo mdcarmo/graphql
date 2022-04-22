@@ -11,7 +11,7 @@ namespace ex_graphql.GraphQL
             : base(provider)
         {
             Query = provider.GetRequiredService<AppQuery>();
-
+            Mutation = provider.GetRequiredService<AppMutation>();
         }
     }
 }

@@ -12,5 +12,11 @@ namespace ex_graphql.Contracts
         Task<IEnumerable<Customer>> GetAllWithOrders();
 
         Task<Customer> GetById(Guid id, bool returnOrders);
+
+        Task<Customer> Create(Customer customer);
+
+        Task<Customer> Update(Customer dbCustomer, Customer customer);
+
+        Task Delete(Customer customer);
     }
 }

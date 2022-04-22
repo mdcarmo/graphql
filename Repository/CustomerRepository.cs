@@ -17,6 +17,7 @@ namespace ex_graphql.Repository
         {
             _context = context;
         }
+
         public async Task<IEnumerable<Customer>> GetAll()
         {
             return await _context.Customers.ToListAsync();
@@ -42,6 +43,30 @@ namespace ex_graphql.Repository
                         .Where(x => x.Id == id)
                         .SingleOrDefaultAsync();
             }
+        }
+
+        public async Task<Customer> Create(Customer customer)
+        {
+            customer.Id = Guid.NewGuid();
+             _context.Customers.Add(customer);
+            await _context.SaveChangesAsync();
+            return customer;
+        }
+
+        public async Task<Customer> Update(Customer dbCustomer, Customer customer)
+        {
+            dbCustomer.Name = customer.Name;
+            dbCustomer.IdentificationNumber = customer.IdentificationNumber;
+            dbCustomer.Email = customer.Email;
+            await _context.SaveChangesAsync();
+
+            return dbCustomer;
+        }
+
+        public async Task Delete(Customer customer)
+        {
+            _context.Remove(customer);
+            await _context.SaveChangesAsync();
         }
     }
 }
